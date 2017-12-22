@@ -1,0 +1,40 @@
+{
+  "name": "hypersonic-express",
+  "version": "1.0.0",
+  "description": "A web application framework based on Express",
+  "main": "main/index.js",
+  "bin": {
+    "hypersonic": "cli/bin.js"
+  },
+  "directories": {
+    "lib": "lib"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Fritz G. Batroni",
+  "license": "MIT",
+  "keywords": [
+    "framework",
+    "api",
+    "application",
+    "server",
+    "modular",
+    "hypersonic-express",
+    "hypersonic",
+    "nodejs",
+    "express",
+    "react"
+  ],
+  "dependencies": {
+    "async": "^2.6.0",
+    "cmnd": "^0.2.1",
+    "colors": "^1.1.2",
+    "cross-spawn-async": "^2.2.5",
+    "dot": "^1.1.2",
+    "fs-extra": "^5.0.0",
+    "i": "^0.3.6",
+    "inquirer": "^4.0.1",
+    "shelljs": "^0.7.8"
+  }
+}

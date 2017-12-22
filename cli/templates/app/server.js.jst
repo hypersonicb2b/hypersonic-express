@@ -1,0 +1,34 @@
+import nconf from 'nconf';
+const logger = require('mod-dev-logger')({logId: '{{= data.simpleName }}' });
+import configManager from './infra/config-manager';
+import middlewareManager from './infra/middleware-manager';
+import routeManager from './infra/route-manager';
+import assetsManager from './infra/assets-manager';
+const ExpressApp = new (require('express-app'))({createNew: true});
+const app = ExpressApp.app;
+
+configManager.handle(app);
+middlewareManager.handle(app);
+assetsManager.handle(app);
+routeManager.handle(app);
+
+const ClusterDaemon = require('express-cluster-daemon');
+const cluster = require('cluster');
+
+const port = nconf.get('port');
+const host = nconf.get('host');
+
+if (cluster.isMaster) {
+  const daemon = new ClusterDaemon();
+  daemon.start(port);
+} else {
+  ExpressApp.start({
+    port,
+    host,
+    logger,
+    onExit: function onExit() {
+      // replace this with actual resource cleanup logic
+      console.log('exiting:: ');
+    }
+  });
+}
