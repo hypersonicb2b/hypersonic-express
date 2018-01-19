@@ -7,7 +7,7 @@
     "hypersonic": "cli/bin.js"
   },
   "directories": {
-    "lib": "lib"
+    "cli": "cli"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"

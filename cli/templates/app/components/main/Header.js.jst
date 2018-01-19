@@ -6,7 +6,7 @@ export default class Header extends React.Component {
     return (
       <header className="app-header">
         <h1 className="title">
-          <IndexLink to={this.props.root}>App</IndexLink>
+          <IndexLink to={this.props.root}>{{= data.name }}</IndexLink>
         </h1>  
       </header>
     );

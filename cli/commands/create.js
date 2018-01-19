@@ -10,7 +10,6 @@ const async = require('async');
 const http = require('http');
 const sh = require('shelljs');
 
-const EventEmitter = require('events').EventEmitter;
 const util = require('util');
 
 //supress shell output
@@ -58,7 +57,6 @@ const CreateCommand = (() => {
   }
 
   function createDirectoryStructure (info) {
-    this.emit('start');
     const dirname = info.name.replace(/[^A-Za-z0-9-_]/gi, '-').toLowerCase();
     const targetDirectory = `./${dirname}`
 
@@ -85,7 +83,10 @@ const CreateCommand = (() => {
     dot.templateSettings.strip = false;
     dot.templateSettings.varname = 'data';
 
-    const templates = ['package.json', 'README.md', 'app/server.js'];
+    const templates = ['package.json', 
+    'README.md', 
+    'app/server.js',
+    'app/components/main/Header.js'];
     const templatesDir = `${this.rootPath}/../templates`
 
     let templateActions = templates.map((template) => {
@@ -122,8 +123,6 @@ const CreateCommand = (() => {
     constructor() {
 
       super('create');
-
-      EventEmitter.call(this);
 
       this.data = {};
       this.rootPath = path.resolve(__dirname);
@@ -168,8 +167,6 @@ const CreateCommand = (() => {
       })
     }
   }
-
-  util.inherits(CreateCommand, EventEmitter);
 
   return CreateCommand;
 })();

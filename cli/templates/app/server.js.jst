@@ -1,28 +1,42 @@
-import nconf from 'nconf';
-const logger = require('mod-dev-logger')({logId: '{{= data.simpleName }}' });
-import configManager from './infra/config-manager';
-import middlewareManager from './infra/middleware-manager';
-import routeManager from './infra/route-manager';
-import assetsManager from './infra/assets-manager';
-const ExpressApp = new (require('express-app'))({createNew: true});
-const app = ExpressApp.app;
-
-configManager.handle(app);
-middlewareManager.handle(app);
-assetsManager.handle(app);
-routeManager.handle(app);
-
+const path = require('path');
+const logger = require('mod-dev-logger')({logId: "{{= data.name }}"});
+const ClientRouteManager = require('./client-route-manager');
+const ExpressConfig = require('hypersonic-express-config');
+const ExpressApp = require('express-app');
+const ConfigurationManager = require('config-able');
 const ClusterDaemon = require('express-cluster-daemon');
 const cluster = require('cluster');
+const configDir = path.resolve(`${__dirname}/config`)
+let localConfig = new ConfigurationManager({path: configDir});
 
-const port = nconf.get('port');
-const host = nconf.get('host');
+const port = localConfig.get('port');
+const host = localConfig.get('host');
 
-if (cluster.isMaster) {
+if (cluster.isMaster && localConfig.get('env') === 'production') {
   const daemon = new ClusterDaemon();
   daemon.start(port);
 } else {
-  ExpressApp.start({
+
+  let expressApp = new ExpressApp({createNew: true})
+  const {app} = expressApp;
+  // Configure express app
+  const expressConfig = new ExpressConfig({
+    path: configDir,
+    app: app,
+    defaults: {
+      root: process.cwd()
+    }
+  })
+  
+  expressConfig.configure('app');
+  expressConfig.configure('middleware');
+  expressConfig.configure('assets');
+  expressConfig.configure('api');
+  // expressConfig.configure('client-router');
+  ClientRouteManager.mapClientRoutes({app});
+
+  // Initialize app
+  expressApp.start({
     port,
     host,
     logger,

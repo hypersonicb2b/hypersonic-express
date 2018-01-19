@@ -1,12 +1,19 @@
 {
-    "domain": "http://localhost:3000",
-    "port": 6001,
-    "compressionThreshold": 512,
-    "host": "localhost",
-    "staticFolderMount": "/assets",
-    "staticFolders": ["public"],
-    "maxAge": "1d",
-    "development": true,
-    "templateRoot": "templates",
-    "templateLayouts": "templates/layouts"
+  "domain": "http://localhost:3000",
+  "port": 6001,
+  "compressionThreshold": 512,
+  "host": "localhost",
+  "static": {
+    "folderMount": "/assets",
+    "folders": ["app/public"]
+  },
+  "maxAge": "1d",
+  "development": true,
+  "env": "development",
+  "view": {
+    "engine": "ejs",
+    "templateRoot": "app/templates",
+    "templateLayouts": "app/templates/layouts/layout",
+    "cache": true
+  }
 }
